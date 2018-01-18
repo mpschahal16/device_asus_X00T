@@ -31,6 +31,9 @@
 /(vendor|system/vendor)/bin/init\.btmac\.sh                                   u:object_r:init_blutmac_exec:s0
 /vendor/bin/nvram_btwifi                                                      u:object_r:nvram_btwifi_exec:s0
 
+# Shell Script
+/(vendor|system/vendor)/bin/init\.qcom\.power\.sh   u:object_r:qti_init_shell_exec:s0
+
 # DRM
 /(vendor|system/vendor)/bin/hw/android\.hardware\.drm@1\.1-service\.clearkey				u:object_r:hal_drm_clearkey_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.drm@1\.0-service\.widevine				u:object_r:hal_drm_widevine_exec:s0
