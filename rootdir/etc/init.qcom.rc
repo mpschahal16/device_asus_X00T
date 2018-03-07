@@ -608,6 +608,7 @@ service vendor.cnd /vendor/bin/cnd
     class main
     user system
     group system wifi inet radio wakelock net_admin
+    writepid /dev/cpuset/system-background/tasks
 
 service dpmQmiMgr /vendor/bin/dpmQmiMgr
     class main
@@ -624,6 +625,7 @@ service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class core
     user root
     oneshot
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.rmt_storage /vendor/bin/rmt_storage
     class core
@@ -641,6 +643,7 @@ service vendor.bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
     group bluetooth net_bt_admin inet
     disabled
     oneshot
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.btsnoop /system/bin/btsnoop
    user bluetooth
@@ -669,6 +672,7 @@ service vendor.port-bridge /vendor/bin/port-bridge
     group radio system inet
     disabled
     oneshot
+    writepid /dev/cpuset/system-background/tasks
 
 service qmiproxy /system/bin/qmiproxy
     class main
@@ -686,6 +690,7 @@ service vendor.qmuxd /vendor/bin/qmuxd
 service vendor.netmgrd /vendor/bin/netmgrd
     class main
     disabled
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.ipacm-diag /vendor/bin/ipacm-diag
     class main
@@ -699,6 +704,7 @@ service vendor.ipacm /vendor/bin/ipacm
     user radio
     group radio inet
     disabled
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.dataqti /vendor/bin/qti
     class main
@@ -711,12 +717,14 @@ service vendor.dataadpl /vendor/bin/adpl
     user radio
     group radio oem_2901 diag usb net_admin
     disabled
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.sensors /vendor/bin/sscrpcd
     class core
     user system
     group system
     disabled
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.sensors.qti /vendor/bin/sensors.qti
     class core
@@ -749,6 +757,7 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     socket vendor_wpa_wlan0 dgram 660 wifi wifi
     disabled
     oneshot
+    writepid /dev/cpuset/system-background/tasks
 
 # Data Migration
 service vendor.move_wifi_data /system/bin/move_wifi_data.sh
@@ -875,6 +884,7 @@ service cnss-daemon /vendor/bin/cnss-daemon -n -l
     user system
     group system inet net_admin wifi
     capabilities NET_ADMIN
+    writepid /dev/cpuset/system-background/tasks
 
 on property:sys.shutdown.requested=*
     stop cnss-daemon
@@ -899,6 +909,7 @@ service loc_launcher /vendor/bin/loc_launcher
     class late_start
     user gps
     group gps
+    writepid /dev/cpuset/system-background/tasks
 
 on property:crypto.driver.load=1
      insmod /system/lib/modules/qce.ko

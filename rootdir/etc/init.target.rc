@@ -220,11 +220,13 @@ service time_daemon /vendor/bin/time_daemon
    class late_start
    user root
    group root
+   writepid /dev/cpuset/system-background/tasks
 
 service adsprpcd /vendor/bin/adsprpcd audiopd
    class main
    user media
    group media
+   writepid /dev/cpuset/system-background/tasks
 
 service hbtp /vendor/bin/hbtp_daemon
     class main
@@ -243,6 +245,7 @@ service vendor.imsqmidaemon /vendor/bin/imsqmidaemon
     user system
     socket ims_qmid stream 0660 system radio
     group radio log diag
+    writepid /dev/cpuset/system-background/tasks
 
 # imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
 service vendor.imsdatadaemon /vendor/bin/imsdatadaemon
@@ -251,12 +254,14 @@ service vendor.imsdatadaemon /vendor/bin/imsdatadaemon
     socket ims_datad stream 0660 system radio
     group system wifi radio inet log diag
     disabled
+    writepid /dev/cpuset/system-background/tasks
 
 service energy-awareness /vendor/bin/energy-awareness
     class main
     user system
     group system
     oneshot
+    writepid /dev/cpuset/system-background/tasks
 
 service vendor.pd_mapper /vendor/bin/pd-mapper
      class core
@@ -272,11 +277,13 @@ service cnss_diag /vendor/bin/cnss_diag -q -f -t HELIUM
    user system
    group system wifi inet sdcard_rw media_rw diag
    oneshot
+   writepid /dev/cpuset/system-background/tasks
 
 service vendor.ims_rtp_daemon /vendor/bin/ims_rtp_daemon
    class main
    user system
    group radio diag inet log
+   writepid /dev/cpuset/system-background/tasks
 
 service vendor.imsrcsservice /vendor/bin/imsrcsd
    class main
@@ -326,6 +333,7 @@ service vendor.hvdcp_opti /vendor/bin/hvdcp_opti
      class main
      user root
      group system wakelock
+     writepid /dev/cpuset/system-background/tasks
 
 #Huaqin modify for disable sar in Indonesia by chenyijun5 at 2018/03/20 start
 on property:ro.config.versatility=ID
