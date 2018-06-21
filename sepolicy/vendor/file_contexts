@@ -48,4 +48,4 @@
 /sys/kernel/notes                                                             u:object_r:sysfs_kernel_notes:s0
 
 # Power
-/vendor/bin/hw/android\.hardware\.power@1\.2-service\.X00T-libperfmgr u:object_r:hal_power_default_exec:s0
+/vendor/bin/hw/android\.hardware\.power@1\.3-service\.X00T-libperfmgr u:object_r:hal_power_default_exec:s0
