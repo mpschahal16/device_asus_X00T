@@ -483,7 +483,7 @@
     <bool name="config_allowAutoBrightnessWhileDozing">true</bool>
 
     <!-- Whether the device supports Smart Pixels -->
-    <bool name="config_supportSmartPixels">true</bool>
+    <bool name="config_enableSmartPixels">true</bool>
 
     <!-- Whether the always on display mode is available. -->
     <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
