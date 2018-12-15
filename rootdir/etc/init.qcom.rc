@@ -1197,3 +1197,6 @@ service vendor.wifilearner /vendor/bin/wifilearner
     user wifi
     group wifi
     oneshot
+
+# Enable PowerHAL hint processing
+    setprop vendor.powerhal.init 1
