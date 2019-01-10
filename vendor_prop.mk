@@ -58,7 +58,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.camera.HAL3.enabled=1 \
     persist.vendor.camera.expose.aux=1 \
     persist.vendor.camera.preview.ubwc=0 \
-    vendor.camera.aux.packagelist=org.codeaurora.snapcam
+    vendor.camera.aux.packagelist=org.codeaurora.snapcam \
+    camera.hal1.packagelist=com.whatsapp
 
 # Charging maximum voltage
 PRODUCT_PROPERTY_OVERRIDES += \
