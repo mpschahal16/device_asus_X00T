@@ -34,3 +34,5 @@ allow init healthd:process { noatsecure };
 allow init netd:process { noatsecure };
 allow init nvram_btwifi:process { noatsecure };
 allow init zygote:process { noatsecure };
+# Allow init create cgroups
+allow init cgroup:file create;
