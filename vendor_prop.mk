@@ -157,7 +157,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Memory optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.qti.sys.fw.bservice_enable=true
+    ro.vendor.qti.sys.fw.bservice_enable=true \
+    ro.vendor.qti.cgroup_follow.enable=true
 
 # Misc
 PRODUCT_PROPERTY_OVERRIDES += \
