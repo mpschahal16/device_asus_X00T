@@ -32,6 +32,9 @@ import android.preference.PreferenceManager;
 
 import com.asus.zenparts.KernelControl;
 import com.asus.zenparts.settings.ScreenOffGesture;
+import com.asus.zenparts.SensorsDozeService;
+import com.asus.zenparts.utils.FileUtils;
+import com.asus.zenparts.Utils;
 
 import java.io.File;
 
@@ -65,14 +68,27 @@ public class Startup extends BroadcastReceiver {
                         screenOffGestureSharedPreferences.getBoolean(
                         ScreenOffGesture.PREF_GESTURE_ENABLE, true));
          }
-
+	context.startService(new Intent(context, SensorsDozeService.class));
         VibratorStrengthPreference.restore(context);
         DisplayCalibration.restore(context);
+    }
+
+    private String getPreferenceString(Context context, String key, String defaultValue) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, defaultValue);
     }
 
     private boolean getPreferenceBoolean(Context context, String key, boolean defaultValue) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(key, defaultValue);
+    }
+
+    private void disableComponent(Context context, String component) {
+        ComponentName name = new ComponentName(context, component);
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(name,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     private void enableComponent(Context context, String component) {

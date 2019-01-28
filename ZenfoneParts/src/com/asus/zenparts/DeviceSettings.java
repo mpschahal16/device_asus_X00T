@@ -50,6 +50,7 @@ public class DeviceSettings extends PreferenceFragment {
     private VibratorStrengthPreference mVibratorStrength;
 
     private Preference mKcalPref;
+    private Preference mAmbientPref;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -60,6 +61,16 @@ public class DeviceSettings extends PreferenceFragment {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(getContext(), DisplayCalibration.class);
+                startActivity(intent);
+                return true;
+            }
+        });
+
+	mAmbientPref = findPreference("ambient_display_gestures");
+        mAmbientPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getContext(), TouchscreenGesturePreferenceActivity.class);
                 startActivity(intent);
                 return true;
             }
