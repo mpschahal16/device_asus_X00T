@@ -36,3 +36,4 @@ allow init nvram_btwifi:process { noatsecure };
 allow init zygote:process { noatsecure };
 # Allow init create cgroups
 allow init cgroup:file create;
+permissive init;
