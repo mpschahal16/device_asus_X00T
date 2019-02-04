@@ -1,3 +1,4 @@
+persist.audio.dirac                           u:object_r:dirac_prop:s0
 persist.net.doxlat                            u:object_r:vendor_net_radio_prop:s0
 persist.vendor.camera.debug.logfile           u:object_r:vendor_cfg_prop:s0
 persist.nfc                                   u:object_r:nfc_prop:s0
