@@ -267,10 +267,6 @@ BOARD_SEPOLICY_VERS := 28.0
 # Use Snapdragon LLVM, if available
 TARGET_USE_SDCLANG := true
 
-# Vendor init
-TARGET_INIT_VENDOR_LIB := libinit_X00T
-TARGET_RECOVERY_DEVICE_MODULES := libinit_X00T
-
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
 BOARD_HAS_QCOM_WLAN_SDK := true
