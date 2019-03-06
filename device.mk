@@ -433,6 +433,14 @@ PRODUCT_COPY_FILES += \
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
 
+# SoundPicker
+PRODUCT_PACKAGES += \
+    SoundPicker
+
+# Substratum
+PRODUCT_PACKAGES += \
+    subskey
+
 # Telephony
 PRODUCT_PACKAGES += \
     qti-telephony-common \
