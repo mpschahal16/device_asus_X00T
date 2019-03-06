@@ -474,6 +474,6 @@
     <!-- Whether the device supports Smart Pixels -->
     <bool name="config_supportSmartPixels">true</bool>
 
-    <string name="config_alternativeDeviceKeyHandlerLib" translatable="false">/system/priv-app/Zenmotions/Zenmotions.apk</string>
-    <string name="config_alternativeDeviceKeyHandlerClass" translatable="false">com.asus.zenmotions.KeyHandler</string>
+    <string name="config_alternativeDeviceKeyHandlerLib" translatable="false">/system/priv-app/ZenfoneParts/ZenfoneParts.apk</string>
+    <string name="config_alternativeDeviceKeyHandlerClass" translatable="false">com.asus.zenparts.KeyHandler</string>
 </resources>
