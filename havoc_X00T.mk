@@ -40,7 +40,7 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="sdm660_64-user 8.1.0 OPM1 1309 release-keys"
 
 # Set BUILD_FINGERPRINT variable to be picked up by both system and vendor build.prop
-BUILD_FINGERPRINT := Android/sdm660_64/sdm660_64:8.1.0/OPM1/15.2016.1805.318-20180712:user/release-keys
+BUILD_FINGERPRINT := google/taimen/taimen:9/PQ2A.190305.002/5240760:user/release-keys
 
 HAVOC_BUILD_TYPE := Official
 PRODUCT_PROPERTY_OVERRIDES += \
