@@ -265,6 +265,9 @@ include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_VERS := 28.0
 #BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
+# Telephony
+TARGET_USES_ALTERNATIVE_MANUAL_NETWORK_SELECT := true
+
 # Use Snapdragon LLVM, if available
 TARGET_USE_SDCLANG := true
 
