@@ -3,7 +3,3 @@
 -keepclassmembers public class com.asus.zenparts.KeyHandler {
     *;
 }
-
--keep class com.asus.zenparts.dirac.* {
-  *;
-}
