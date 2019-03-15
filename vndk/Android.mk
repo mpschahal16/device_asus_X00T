@@ -39,7 +39,7 @@ endef
 $(foreach lib,$(VNDK_SP_LIBRARIES),\
     $(eval $(call define-vndk-sp-lib,$(lib))))
 
-include $(CLEAR_VARS)
+include $(CLEAR_VARS) 
 LOCAL_MODULE := vndk-sp
 LOCAL_MODULE_TAGS := optional
 LOCAL_REQUIRED_MODULES := $(addsuffix .vndk-sp-gen,$(VNDK_SP_LIBRARIES))
