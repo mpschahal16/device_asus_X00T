@@ -4,7 +4,6 @@ type vendor_kl_file, vendor_file_type, file_type;
 type keylayout_file, file_type, vendor_file_type;
 type sysfs_dclicknode, sysfs_type, fs_type;
 type kcal_dev, sysfs_type, file_type;
-type nvram_btwifi_tmpfs, fs_type;
 type sysfs_touchpanel, sysfs_type, fs_type;
 
 # Fingerprint
