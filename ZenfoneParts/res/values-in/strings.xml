@@ -32,6 +32,8 @@
     <string name="kcal_contrast">Kontras</string>
     <string name="menu_reset">Atur ulang</string>
     <string name="kcal_color_temp">Suhu warna (K)</string>
+    <string name="kcal_hue">Rona</string>
+    <string name="kcal_value">Nilai</string>
     <string name="kcal_greyscale_title">Skala Abu-abu</string>
     <string name="kcal_greyscale_summary">Hilangkan saturasi secara penuh</string>
     <string name="presets_list_title">Muat preset KCAL</string>
