@@ -150,7 +150,8 @@ PRODUCT_PACKAGES += \
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
     cneapiclient \
-    com.quicinc.cne
+    com.quicinc.cne \
+    services-ext
 
 # Configstore
 PRODUCT_PACKAGES += \
