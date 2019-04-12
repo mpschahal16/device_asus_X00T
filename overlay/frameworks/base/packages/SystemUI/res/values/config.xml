@@ -35,4 +35,8 @@
         <item>7</item> <!-- 3: HIGH -->
         <item>27</item> <!-- 4: SUN -->
     </integer-array>
+
+    <!-- Whether to artificially interpret all signal strengths as
+         one bar higher than they actually are -->
+    <bool name="config_inflateSignalStrength">true</bool>
 </resources>
