@@ -144,7 +144,8 @@ PRODUCT_PACKAGES += \
     camera.device@3.2-impl \
     camera.device@3.3-impl \
     libxml2 \
-    GoogleCamera
+    GoogleCamera \
+    Snap2
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
