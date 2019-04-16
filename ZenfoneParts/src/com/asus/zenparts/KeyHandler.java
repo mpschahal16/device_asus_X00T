@@ -68,10 +68,10 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
     private static final int GESTURE_W_SCANCODE = 253;
     private static final int GESTURE_Z_SCANCODE = 254;
     private static final int GESTURE_SWIPE_UP = 255;
-    private static final int GESTURE_SWIPE_DOWN = 256;
+//    private static final int GESTURE_SWIPE_DOWN = 256;
     private static final int GESTURE_SWIPE_LEFT = 257;
     private static final int GESTURE_SWIPE_RIGHT = 258;
-    private static final int GESTURE_DOUBLE_TAP = 260;
+//    private static final int GESTURE_DOUBLE_TAP = 260;
 
     // Slider
      private static final int KEYCODE_SLIDER_TOP = 601;
@@ -86,10 +86,10 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         GESTURE_S_SCANCODE,
         GESTURE_Z_SCANCODE,
 	GESTURE_SWIPE_UP,
-	GESTURE_SWIPE_DOWN,
+//	GESTURE_SWIPE_DOWN,
 	GESTURE_SWIPE_LEFT,
 	GESTURE_SWIPE_RIGHT,
-        GESTURE_DOUBLE_TAP,
+//        GESTURE_DOUBLE_TAP,
         KEYCODE_SLIDER_TOP,
         KEYCODE_SLIDER_MIDDLE,
         KEYCODE_SLIDER_BOTTOM
@@ -104,10 +104,10 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
         GESTURE_S_SCANCODE,
         GESTURE_Z_SCANCODE,
 	GESTURE_SWIPE_UP,
-	GESTURE_SWIPE_DOWN,
+//	GESTURE_SWIPE_DOWN,
 	GESTURE_SWIPE_LEFT,
 	GESTURE_SWIPE_RIGHT,
-        GESTURE_DOUBLE_TAP,
+//        GESTURE_DOUBLE_TAP,
         KEY_DOUBLE_TAP
      };
 
@@ -235,12 +235,12 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
                         ActionConstants.ACTION_WAKE_DEVICE);
                         doHapticFeedback();
                 break;
-            case GESTURE_SWIPE_DOWN:
-                action = getGestureSharedPreferences()
-                        .getString(ScreenOffGesture.PREF_GESTURE_DOWN,
-                        ActionConstants.ACTION_VIB_SILENT);
-                        doHapticFeedback();
-                break;
+//            case GESTURE_SWIPE_DOWN:
+//                action = getGestureSharedPreferences()
+//                        .getString(ScreenOffGesture.PREF_GESTURE_DOWN,
+//                        ActionConstants.ACTION_VIB_SILENT);
+//                        doHapticFeedback();
+//                break;
             case GESTURE_SWIPE_LEFT:
                 action = getGestureSharedPreferences()
                         .getString(ScreenOffGesture.PREF_GESTURE_LEFT,
@@ -253,12 +253,12 @@ public class KeyHandler implements AlternativeDeviceKeyHandler {
                         ActionConstants.ACTION_MEDIA_NEXT);
                         doHapticFeedback();
                 break;
-            case GESTURE_DOUBLE_TAP:
-                action = getGestureSharedPreferences()
-                        .getString(ScreenOffGesture.PREF_GESTURE_DOUBLE_TAP,
-                        ActionConstants.ACTION_WAKE_DEVICE);
-                        doHapticFeedback();
-                break;
+//            case GESTURE_DOUBLE_TAP:
+//                action = getGestureSharedPreferences()
+//                        .getString(ScreenOffGesture.PREF_GESTURE_DOUBLE_TAP,
+//                        ActionConstants.ACTION_WAKE_DEVICE);
+//                        doHapticFeedback();
+//                break;
     }
 
             if (action == null || action != null && action.equals(ActionConstants.ACTION_NULL)) {
