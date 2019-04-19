@@ -262,6 +262,7 @@ VENDOR_SECURITY_PATCH := 2019-03-01
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Strip debug
 PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
