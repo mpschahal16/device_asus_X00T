@@ -1,0 +1,1 @@
+allow untrusted_app_25 persist_drm_file:dir getattr;

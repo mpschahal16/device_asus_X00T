@@ -1,9 +1,11 @@
 # WLAN
 /sys/kernel/boot_wlan(/.*)?                                                   u:object_r:sysfs_wifi:s0
+/sys/kernel/debug/wlan[0-9](/.*)?                                             u:object_r:debugfs:s0
 
 # Sensors
 /sys/devices/virtual/input/input[0-9]+/stk3x3x-light(/.*)?                    u:object_r:sysfs_sensors:s0
 /sys/devices/virtual/input/input[0-9]+/stk3x3x-proximity(/.*)?                u:object_r:sysfs_sensors:s0
+/sys/devices/virtual/input/input[0-9]/stk3xlx-proximity(/.*)?                 u:object_r:sysfs:s0
 /sys/module/stk3x3x/parameters/call_status_flag                               u:object_r:sysfs_call_status:s0
 
 # gpio-keys
@@ -29,3 +31,10 @@
 # blutmac script
 /(vendor|system/vendor)/bin/init\.btmac\.sh                                   u:object_r:init_blutmac_exec:s0
 /vendor/bin/nvram_btwifi                                                      u:object_r:nvram_btwifi_exec:s0
+
+# DRM
+/(vendor|system/vendor)/bin/hw/android\.hardware\.drm@1\.1-service\.clearkey				u:object_r:hal_drm_clearkey_exec:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.drm@1\.0-service\.widevine				u:object_r:hal_drm_widevine_exec:s0
+
+# Persist
+/mnt/vendor/persist/data                                                      u:object_r:persist_drm_file:s0
