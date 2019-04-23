@@ -74,9 +74,9 @@
     <string name="gesture_c_title">Gestur C</string>
     <string name="gesture_e_title">Gestur e</string>
     <string name="gesture_up_title">Gestur usap ke atas</string>
-    <string name="gesture_down_title">Gestur usap ke atas</string>
-    <string name="gesture_left_title">Gestur usap ke atas</string>
-    <string name="gesture_right_title">Gestur usap ke atas</string>
+    <string name="gesture_down_title">Gestur usap ke bawah</string>
+    <string name="gesture_left_title">Gestur usap ke kiri</string>
+    <string name="gesture_right_title">Gestur usap ke kanan</string>
     <string name="screen_gestures_panel_title">Gestur</string>
 
 </resources>
