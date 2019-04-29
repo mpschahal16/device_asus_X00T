@@ -1,1 +1,4 @@
 allow untrusted_app_25 persist_drm_file:dir getattr;
+allow untrusted_app_25 sysfs:file getattr;
+allow untrusted_app_25 sysfs:dir read;
+allow untrusted_app_25 sysfs_kernel_notes:file getattr;

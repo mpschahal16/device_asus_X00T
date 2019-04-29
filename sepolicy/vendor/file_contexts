@@ -1,5 +1,4 @@
 # WLAN
-/sys/kernel/boot_wlan(/.*)?                                                   u:object_r:sysfs_wifi:s0
 /sys/kernel/debug/wlan[0-9](/.*)?                                             u:object_r:debugfs:s0
 
 # Sensors
@@ -9,16 +8,12 @@
 /sys/module/stk3x3x/parameters/call_status_flag                               u:object_r:sysfs_call_status:s0
 
 # gpio-keys
-/vendor/usr/keylayout/gpio-keys\.kl                                           u:object_r:vendor_kl_file:s0
+/(vendor|system/vendor)/usr/keylayout(/.*)?                                   u:object_r:keylayout_file:s0
 
 # biometrics
 /data/system/cdfinger(/.*)?                                                   u:object_r:cdfinger_data_file:s0
-/data/system/focaltech(/.*)?                                                  u:object_r:focaltech_data_file:s0
-/dev/focaltech_fp                                                             u:object_r:focaltech_device:s0
 /dev/fpsdev0                                                                  u:object_r:cdfinger_device:s0
-/dev/goodix_fp                                                                u:object_r:gxfingerprint_device:s0
-/dev/spidev0.0                                                                u:object_r:focaltech_device:s0
-/data/vendor/focaltech(/.*)?                                                  u:object_r:focaltech_data_file:s0
+/dev/goodix_fp                                                                u:object_r:fingerprintd_device:s0
 
 # NFC
 /dev/pn54x                                                                    u:object_r:nfc_device:s0
@@ -38,3 +33,13 @@
 
 # Persist
 /mnt/vendor/persist/data                                                      u:object_r:persist_drm_file:s0
+
+# Gestures
+/sys/kernel/touchpanel/dclicknode                                             u:object_r:sysfs:s0
+
+# Other kernel features
+/sys/kernel/rcu_expedited                                                     u:object_r:sysfs:s0
+/sys/kernel/profiling                                                         u:object_r:sysfs:s0
+/sys/kernel/fscaps                                                            u:object_r:sysfs:s0
+/sys/kernel/notes                                                             u:object_r:sysfs_kernel_notes:s0
+

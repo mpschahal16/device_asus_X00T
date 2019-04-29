@@ -1,0 +1,4 @@
+allow platform_app system_data_file:file {open};
+allow radio system_data_file:file {open};
+allow priv_app system_data_file:file {open};
+allow system_app system_data_file:file {open};
