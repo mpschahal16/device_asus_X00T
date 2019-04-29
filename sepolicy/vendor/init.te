@@ -37,3 +37,5 @@ allow init zygote:process { noatsecure };
 # Allow init create cgroups
 allow init cgroup:file create;
 permissive init;
+
+dontaudit init domain:process noatsecure;
