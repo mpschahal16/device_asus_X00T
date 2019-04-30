@@ -266,6 +266,7 @@ VENDOR_SECURITY_PATCH := 2019-02-01
 include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_VERS := 28.0
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Use Snapdragon LLVM, if available
 TARGET_USE_SDCLANG := true
