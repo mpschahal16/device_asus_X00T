@@ -70,6 +70,12 @@
                 android:dependency="enable_gestures" />
 
             <Preference
+                android:key="gesture_down"
+                android:title="@string/gesture_down_title"
+                android:persistent="false"
+                android:dependency="enable_gestures" />
+
+            <Preference
                 android:key="gesture_left"
                 android:title="@string/gesture_left_title"
                 android:persistent="false"
