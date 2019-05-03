@@ -211,7 +211,7 @@
        <version>1.0</version>
        <interface>
            <name>IRadioConfig</name>
-           <instance>radioconfig</instance>
+           <instance>default</instance>
        </interface>
     </hal>
     <hal format="hidl">
@@ -567,15 +567,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.qti.hardware.radio.atcmdfwd</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IAtCmdFwd</name>
-            <instance>AtCmdFwdService</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>vendor.qti.hardware.radio.ims</name>
         <transport>hwbinder</transport>
         <version>1.4</version>
@@ -696,6 +687,6 @@
         </interface>
     </hal>
     <sepolicy>
-        <version>27.0</version>
+        <version>28.0</version>
     </sepolicy>
 </manifest>
