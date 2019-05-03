@@ -1,3 +1,6 @@
+# Android USB
+/sys/devices/virtual/android_usb/android[0-9](/.*)?                           u:object_r:sysfs_android_usb:s0
+
 # WLAN
 /sys/kernel/debug/wlan[0-9](/.*)?                                             u:object_r:debugfs:s0
 
@@ -8,6 +11,7 @@
 /sys/module/stk3x3x/parameters/call_status_flag                               u:object_r:sysfs_call_status:s0
 
 # gpio-keys
+/vendor/usr/keylayout/gpio-keys\.kl                                           u:object_r:vendor_kl_file:s0
 /(vendor|system/vendor)/usr/keylayout(/.*)?                                   u:object_r:keylayout_file:s0
 
 # biometrics

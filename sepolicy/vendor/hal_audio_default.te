@@ -1,1 +1,2 @@
 allow hal_audio_default default_prop:file read;
+allow hal_audio_default sysfs_net:dir open;

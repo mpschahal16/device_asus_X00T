@@ -1,2 +1,6 @@
 # Allow netmgrd to set vendor_net_radio_prop
 set_prop(netmgrd, vendor_net_radio_prop)
+allow netmgrd default_prop:property_service set;
+allow netmgrd property_socket:sock_file write;
+allow netmgrd netutils_wrapper:process noatsecure;
+allow netmgrd kernel:system module_request;

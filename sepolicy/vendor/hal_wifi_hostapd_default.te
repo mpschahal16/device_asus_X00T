@@ -1,0 +1,2 @@
+allow hal_wifi_hostapd_default kernel:system module_request;
+allow hal_wifi_hostapd_default init:process noatsecure;

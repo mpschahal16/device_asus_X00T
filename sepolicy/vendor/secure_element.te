@@ -1,0 +1,5 @@
+allow secure_element bg_boot_complete_prop:file { read };
+allow secure_element bg_daemon_prop:file { read };
+allow secure_element bluetooth_prop:file { read };
+allow secure_element bootloader_boot_reason_prop:file { read };
+allow secure_element boottime_prop:file { read };
