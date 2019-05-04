@@ -8,4 +8,5 @@ allow kernel mnt_vendor_file:dir search;
 allow kernel mnt_vendor_file:file open;
 allow kernel mnt_vendor_file:file read;
 allow kernel kernel:security { setenforce };
-allow kernel init:process { noatsecure }; 
+allow kernel init:process { noatsecure };
+allow kernel adsprpcd_file:dir search;

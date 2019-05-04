@@ -15,3 +15,4 @@ allow untrusted_app_27 ctl_console_prop:file { read };
 allow untrusted_app_27 ctl_default_prop:file { read };
 allow untrusted_app_27 ctl_dumpstate_prop:file { read };
 allow untrusted_app_27 ctl_fuse_prop:file { read };
+allow untrusted_app_27 proc_zoneinfo:file { read };

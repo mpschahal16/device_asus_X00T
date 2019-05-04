@@ -1,6 +1,6 @@
 allow webview_zygote theme_data_file:dir search;
 allow webview_zygote mnt_expand_file:dir { getattr };
-allow webview_zygote theme_data_file:file { read };
+allow webview_zygote theme_data_file:file { read open };
 allow webview_zygote adsprpc_prop:file { read };
 allow webview_zygote bg_boot_complete_prop:file { read };
 allow webview_zygote bg_daemon_prop:file { read };
