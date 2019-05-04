@@ -222,7 +222,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.vc_call_vol_steps=11 \
     ro.ril.ecclist=112,911 \
     ro.telephony.default_network=20,20 \
-    telephony.lteOnCdmaDevice=1
+    telephony.lteOnCdmaDevice=1 \
+    persist.radio.data_ltd_sys_ind=1 \
+    persist.radio.data_con_rprt=1 \
+    persist.radio.calls.on.ims=1 \
+    persist.dbg.ims_volte_enable=1 \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.wfc_avail_ovr=1
 
 # RmNet Data
 PRODUCT_PROPERTY_OVERRIDES += \
