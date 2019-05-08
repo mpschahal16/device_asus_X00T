@@ -64,9 +64,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.vendor.camera.eis.enable=1 \
-    persist.vendor.camera.ois.disable=1 \
-    persist.vendor.camera.is_type=4 \
     persist.ts.rtmakeup=1 \
     persist.vendor.camera.HAL3.enabled=1 \
     persist.vendor.camera.expose.aux=1 \
@@ -149,7 +146,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     media.stagefright.enable-qcp=true \
     media.stagefright.enable-scan=true \
     mm.enable.smoothstreaming=true \
-    vendor.mm.enable.qcom_parser=13631487 \
+    vendor.mm.enable.qcom_parser=262029 \
     mmp.enable.3g2=true \
     persist.mm.enable.prefetch=true \
     vendor.vidc.enc.disable_bframes=1 \
