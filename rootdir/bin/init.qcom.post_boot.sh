@@ -2400,8 +2400,23 @@ case "$target" in
             echo 20 > /proc/sys/kernel/sched_small_wakee_task_load
 
             # cpuset settings
-            echo 0-3 > /dev/cpuset/background/cpus
+            echo 0-1 > /dev/cpuset/background/cpus
             echo 0-3 > /dev/cpuset/system-background/cpus
+            echo 0-3 > /dev/cpuset/foreground/cpus
+            echo 0-7 > /dev/cpuset/restricted/cpus
+            echo 0-7 > /dev/cpuset/top-app/cpus
+
+            # schedtune settings
+            echo 0 > /dev/stune/schedtune.boost
+            echo 0 > /dev/stune/schedtune.prefer_idle
+            echo 1 > /dev/stune/top-app/schedtune.boost
+            echo 1 > /dev/stune/top-app/schedtune.prefer_idle
+            echo 0 > /dev/stune/foreground/schedtune.boost
+            echo 1 > /dev/stune/foreground/schedtune.prefer_idle
+            echo 0 > /dev/stune/background/schedtune.boost
+            echo 0 > /dev/stune/background/schedtune.prefer_idle
+            echo 1 > /dev/stune/rt/schedtune.boost
+            echo 1 > /dev/stune/rt/schedtune.prefer_idle
 
             # disable thermal bcl hotplug to switch governor
             echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -2444,6 +2459,10 @@ case "$target" in
             echo 1113600 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
             echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
             echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/fast_ramp_down
+
+            # CPU Governor
+            echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+            echo "schedutil" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
 
             # bring all cores online
             echo 1 > /sys/devices/system/cpu/cpu0/online
