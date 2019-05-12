@@ -322,20 +322,6 @@ on property:init.svc.zygote=restarting
 on property:sys.boot_completed=1
     swapon_all /vendor/etc/fstab.qcom
 
-on property:persist.camera.HAL3.enabled=0
-    setprop persist.vendor.camera.HAL3.enabled 0
-    stop vendor.camera-provider-2-4
-    stop cameraserver
-    start vendor.camera-provider-2-4
-    start cameraserver
-
-on property:persist.camera.HAL3.enabled=1
-    setprop persist.vendor.camera.HAL3.enabled 1
-    stop vendor.camera-provider-2-4
-    stop cameraserver
-    start vendor.camera-provider-2-4
-    start cameraserver
-
 on charger
     load_system_props
     start qcom-post-boot
