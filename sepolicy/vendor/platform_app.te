@@ -6,7 +6,7 @@ allow platform_app boottime_prop:file read;
 allow platform_app cdfinger_prop:file read;
 allow platform_app cnd_vendor_prop:file read;
 allow platform_app console_silent_prop:file read;
-allow platform_app vendor_cfg_prop:file { read open };
+allow platform_app vendor_cfg_prop:file { getattr read open };
 allow platform_app ctl_LKCore_prop:file read;
 allow platform_app ctl_default_prop:file read;
 allow platform_app ctl_atfwd_prop:file read;
