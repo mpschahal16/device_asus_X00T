@@ -882,6 +882,12 @@ on property:persist.vendor.data.perf_ko_load=1
 on property:persist.vendor.data.perf_ko_load=0
     exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -r -d /vendor/lib/modules rmnet_perf
 
+on property:vendor.hw.fm.init=0
+    write /sys/module/radio_iris_transport/parameters/fmsmd_set 0
+
+on property:vendor.hw.fm.init=1
+    write /sys/module/radio_iris_transport/parameters/fmsmd_set 1
+
 service cnss-daemon /vendor/bin/cnss-daemon -n -l
     class late_start
     user system
