@@ -1,2 +1,3 @@
 set_prop(hal_camera_default, vendor_cfg_prop)
 allow hal_camera_default vendor_cfg_prop:file r_file_perms;
+allow cameraserver mediacodec:binder call;
