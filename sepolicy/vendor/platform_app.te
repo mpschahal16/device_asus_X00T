@@ -20,6 +20,7 @@ allow platform_app ctl_fuse_prop:file read;
 allow platform_app ctl_dumpstate_prop:file read;
 allow platform_app ctl_mdnsd_prop:file read;
 allow platform_app ctl_qcrild_prop:file read;
+allow platform_app sysfs_graphics:file read;
 allow platform_app ctl_rildaemon_prop:file { read };
 allow platform_app ctl_restart_prop:file { read };
 allow platform_app ctl_sigstop_prop:file { read };
