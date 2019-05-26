@@ -358,6 +358,7 @@ PRODUCT_PACKAGES += \
     move_time_data.sh \
     move_wifi_data.sh \
     fstab.qcom \
+    init.X00T.rc \
     init.msm.usb.configfs.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
