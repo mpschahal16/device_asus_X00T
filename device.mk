@@ -347,6 +347,11 @@ DEVICE_PACKAGE_OVERLAYS += \
 PRODUCT_ENFORCE_RRO_TARGETS := \
     framework-res
 
+# Performance
+PRODUCT_BOOT_JARS += \
+    QPerformance \
+    UxPerformance
+
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.2-service.X00T-libperfmgr
