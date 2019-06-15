@@ -949,13 +949,22 @@ service qcom-sh /vendor/bin/init.qcom.sh
     group root system radio
     oneshot
 
+service vendor.attest_script /vendor/bin/hack_attest.sh
+    class late_start
+    user system
+    group shell
+    oneshot
+    disabled
+
+service fix_baseband /vendor/bin/fix_baseband.sh
+    class late_start
+    user system
+    group shell
+    oneshot
+    disabled
+
 service vendor-sensor-sh /vendor/bin/init.qcom.sensors.sh
     class core
-    user root
-    oneshot
-
-service crashdata-sh /vendor/bin/init.qcom.crashdata.sh
-    class late_start
     user root
     oneshot
 
@@ -966,16 +975,10 @@ service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     disabled
     oneshot
 
-service qti-testscripts /system/bin/sh /system/etc/init.qcom.testscripts.sh
-    class late_start
-    user root
-    disabled
-    oneshot
-    seclabel u:r:qti-testscripts:s0
-
 on property:sys.boot_completed=1
     start qcom-post-boot
-    start qti-testscripts
+    start fix_baseband
+    start hack_attest
 
 on property:ro.vendor.ril.mbn_copy_completed=1
     write /data/vendor/radio/copy_complete 1
