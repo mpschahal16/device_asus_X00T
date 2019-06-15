@@ -135,6 +135,10 @@ BOARD_CHARGER_ENABLE_SUSPEND := true
 # CNE and DPM
 BOARD_USES_QCNE := true
 
+# CPUSets
+ENABLE_CPUSETS := true
+ENABLE_SCHEDBOOST := true
+
 # Crypto
 TARGET_HW_DISK_ENCRYPTION := true
 TARGET_CRYPTFS_HW_PATH ?= vendor/qcom/opensource/cryptfs_hw
