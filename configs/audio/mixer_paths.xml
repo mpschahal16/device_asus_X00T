@@ -382,10 +382,10 @@
     <ctl name="IIR1 Enable Band3" value="0" />
     <ctl name="IIR1 Enable Band4" value="0" />
     <ctl name="IIR1 Enable Band5" value="0" />
-    <ctl name="IIR1 INP1 Volume" value="84" />
-    <ctl name="IIR1 INP2 Volume" value="84" />
-    <ctl name="IIR1 INP3 Volume" value="84" />
-    <ctl name="IIR1 INP4 Volume" value="84" />
+    <ctl name="IIR1 INP1 Volume" value="53" />
+    <ctl name="IIR1 INP2 Volume" value="53" />
+    <ctl name="IIR1 INP3 Volume" value="53" />
+    <ctl name="IIR1 INP4 Volume" value="53" />
     <ctl name="IIR1 INP1 MUX" value="ZERO" />
 
     <!-- anc related -->
@@ -1993,7 +1993,6 @@
 
     <path name="handset-mic">
         <path name="adc1" />
-        <ctl name="ADC1 Volume" value="10" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
     </path>
 
@@ -2016,6 +2015,14 @@
     </path>
 
     <path name="anc-handset">
+    </path>
+
+    <path name="hph-highquality-mode">
+        <ctl name="RX HPH Mode" value="HD2" />
+    </path>
+
+    <path name="hph-lowpower-mode">
+        <ctl name="RX HPH Mode" value="NORMAL" />
     </path>
 
 	<!-- Huaqin add for improve hp out voltage to 800mv by xudayi at 2018/06/15 start -->
@@ -2053,7 +2060,6 @@
 
     <path name="voice-handset">
         <path name="handset" />
-        <ctl name="RX0 Digital Volume" value="90" />
     </path>
 
     <path name="voice-handset-tmus">
@@ -2239,8 +2245,6 @@
 
     <path name="handset-stereo-dmic-ef">
         <path name="handset-dmic-endfire" />
-        <ctl name="ADC1 Volume" value="10" />
-        <ctl name="ADC3 Volume" value="10" />
     </path>
 
     <path name="speaker-stereo-dmic-ef">
