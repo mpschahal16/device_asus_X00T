@@ -116,11 +116,31 @@ $(BT_FIRMWARE_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BT_FIRMWARE_SYMLINKS)
 
-EGL_SYMLINK := $(TARGET_OUT_VENDOR)/lib/libEGL_adreno.so
-$(EGL_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+# Adreno symlink for camera EIS
+GLESV2_ADRENO_SYMLINK := $(TARGET_OUT_VENDOR)/lib/libGLESv2_adreno.so
+$(GLESV2_ADRENO_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "libGLESv2_adreno shared object link: $@"
 	@mkdir -p $(dir $@)
+	@rm -rf $@
 	$(hide) ln -sf egl/$(notdir $@) $@
 
-ALL_DEFAULT_INSTALLED_MODULES += $(EGL_SYMLINK)
+ALL_DEFAULT_INSTALLED_MODULES += $(GLESV2_ADRENO_SYMLINK)
+
+# libtinycompress symlink for audio hal
+TINYCOMPRESS_SYMLINK := $(TARGET_OUT_VENDOR)/lib/libtinycompress_vendor.so
+$(TINYCOMPRESS_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "libtinycompress shared object link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf libtinycompress.so $@
+
+TINYCOMPRESS64_SYMLINK := $(TARGET_OUT_VENDOR)/lib64/libtinycompress_vendor.so
+$(TINYCOMPRESS64_SYMLINK): $(LOCAL_INSTALLED_MODULE)
+	@echo "libtinycompress_64 shared object link: $@"
+	@mkdir -p $(dir $@)
+	@rm -rf $@
+	$(hide) ln -sf libtinycompress.so $@
+
+ALL_DEFAULT_INSTALLED_MODULES += $(TINYCOMPRESS_SYMLINK) $(TINYCOMPRESS64_SYMLINK)
 
 endif
