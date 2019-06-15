@@ -2400,11 +2400,8 @@ case "$target" in
             echo 20 > /proc/sys/kernel/sched_small_wakee_task_load
 
             # cpuset settings
-            echo 0-1 > /dev/cpuset/background/cpus
-            echo 0-3 > /dev/cpuset/system-background/cpus
-            echo 0-3 > /dev/cpuset/foreground/cpus
-            echo 0-7 > /dev/cpuset/restricted/cpus
-            echo 0-7 > /dev/cpuset/top-app/cpus
+            # echo 0-1 > /dev/cpuset/background/cpus
+            # echo 0-3 > /dev/cpuset/system-background/cpus
 
             # schedtune settings
             echo 0 > /dev/stune/schedtune.boost
