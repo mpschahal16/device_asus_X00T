@@ -29,3 +29,5 @@ allow system_app ctl_mdnsd_prop:file { read };
 allow system_app ctl_qcrild_prop:file { read };
 allow system_app ctl_restart_prop:file { read };
 allow system_app apk_data_file:dir { write };
+allow system_app sysfs_leds:dir search;
+allow system_app sysfs_leds:file { open getattr write };
