@@ -972,7 +972,6 @@ service vendor-sensor-sh /vendor/bin/init.qcom.sensors.sh
 service vendor.qcom-power /vendor/bin/init.qcom.power.sh
     class main
     user root
-    disabled
     oneshot
 
 service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
