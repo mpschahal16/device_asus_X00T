@@ -1,2 +1,4 @@
 r_dir_file(hal_power_default, debugfs_wlan)
-allow hal_power_default proc_dclicknode:file rw_file_perms;
+allow hal_power_default sysfs_dclicknode:file rw_file_perms;
+allow hal_power_default debugfs:file getattr;
+allow hal_power_default sysfs:file { write open };
