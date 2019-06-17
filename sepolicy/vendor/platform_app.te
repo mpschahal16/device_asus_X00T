@@ -30,3 +30,4 @@ allow platform_app ctl_vendor_hbtp_prop:file { read };
 allow platform_app ctl_vendor_imsrcsservice_prop:file { read };
 allow platform_app ctl_vendor_mmid_prop:file { read };
 allow platform_app ctl_vendor_netmgrd_prop:file { read };
+allow platform_app sysfs_leds:dir search; 
