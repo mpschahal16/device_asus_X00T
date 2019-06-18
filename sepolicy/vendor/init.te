@@ -34,5 +34,6 @@ allow init healthd:process { noatsecure };
 allow init netd:process { noatsecure };
 allow init nvram_btwifi:process { noatsecure };
 allow init zygote:process { noatsecure };
+allow init sysfs_mmc_host:file { setattr w_file_perms };
 
 dontaudit init domain:process noatsecure;
