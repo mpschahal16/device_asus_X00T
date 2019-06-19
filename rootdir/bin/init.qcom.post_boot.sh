@@ -239,7 +239,6 @@ function configure_zram_parameters() {
     fi
 
     if [ -f /sys/block/zram0/disksize ]; then
-        echo 1 > /sys/block/zram0/use_dedup
         if [ $MemTotal -le 524288 ]; then
             echo 402653184 > /sys/block/zram0/disksize
         elif [ $MemTotal -le 1048576 ]; then
@@ -266,6 +265,7 @@ function configure_read_ahead_kb_values() {
         echo 128 > /sys/block/mmcblk0rpmb/queue/read_ahead_kb
         echo 128 > /sys/block/dm-0/queue/read_ahead_kb
         echo 128 > /sys/block/dm-1/queue/read_ahead_kb
+        echo 128 > /sys/block/dm-2/queue/read_ahead_kb
     else
         echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
         echo 512 > /sys/block/mmcblk0/queue/read_ahead_kb
@@ -273,6 +273,7 @@ function configure_read_ahead_kb_values() {
         echo 512 > /sys/block/mmcblk0rpmb/queue/read_ahead_kb
         echo 512 > /sys/block/dm-0/queue/read_ahead_kb
         echo 512 > /sys/block/dm-1/queue/read_ahead_kb
+        echo 512 > /sys/block/dm-2/queue/read_ahead_kb
     fi
 }
 
@@ -333,6 +334,8 @@ if [ "$ProductName" == "msmnile" ]; then
       # Enable ZRAM
       configure_zram_parameters
       configure_read_ahead_kb_values
+      echo 0 > /proc/sys/vm/page-cluster
+      echo 100 > /proc/sys/vm/swappiness
 else
     arch_type=`uname -m`
     MemTotalStr=`cat /proc/meminfo | grep MemTotal`
@@ -345,6 +348,10 @@ else
         echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
         echo 0 > /sys/module/process_reclaim/parameters/enable_process_reclaim
         disable_core_ctl
+        # Enable oom_reaper for Go devices
+        if [ -f /proc/sys/vm/reap_mem_on_sigkill ]; then
+            echo 1 > /proc/sys/vm/reap_mem_on_sigkill
+        fi
     else
 
         # Read adj series and set adj threshold for PPR and ALMK.
@@ -373,11 +380,11 @@ else
 
             vmpres_file_min=$((minfree_5 + (minfree_5 - rem_minfree_4)))
             echo $vmpres_file_min > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-			if [ $MemTotal -gt 2097152 ]; then
-		    # Huaqin add for ZQL1820-699 by shengzhong at 2018/09/19 start
-		    echo "48432,63040,70648,95256,130296,145640" > /sys/module/lowmemorykiller/parameters/minfree
-		    # Huaqin add for ZQL1820-699 by shengzhong at 2018/09/19 end
-			fi
+            if [ $MemTotal -gt 5505024 ]; then
+                echo "18432,23040,27648,32256,85296,120640" > /sys/module/lowmemorykiller/parameters/minfree
+            else
+                echo "18432,23040,27648,32256,55296,100640" > /sys/module/lowmemorykiller/parameters/minfree
+            fi
         else
             # Set LMK series, vmpressure_file_min for 32 bit non-go targets.
             # Disable Core Control, enable KLMK for non-go 8909.
@@ -391,7 +398,7 @@ else
 
         # Enable adaptive LMK for all targets &
         # use Google default LMK series for all 64-bit targets >=2GB.
-        echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 
         # Enable oom_reaper
         if [ -f /sys/module/lowmemorykiller/parameters/oom_reaper ]; then
@@ -415,7 +422,7 @@ else
           *)
             #Set PPR parameters for all other targets.
             echo $set_almk_ppr_adj > /sys/module/process_reclaim/parameters/min_score_adj
-            echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
+            echo 0 > /sys/module/process_reclaim/parameters/enable_process_reclaim
             echo 50 > /sys/module/process_reclaim/parameters/pressure_min
             echo 70 > /sys/module/process_reclaim/parameters/pressure_max
             echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
@@ -455,13 +462,11 @@ function enable_memory_features()
 
 function start_hbtp()
 {
-#Huaqin delete for ZQL1650-437 by sundaoyong for Disable improve touch at 2018/2/27 start
         # Start the Host based Touch processing but not in the power off mode.
-        #bootmode=`getprop ro.bootmode`
-        #if [ "charger" != $bootmode ]; then
-        #        start vendor.hbtp
-        #fi
-#Huaqin delete for ZQL1650-437 by sundaoyong for Disable improve touch at 2018/2/27 end
+        bootmode=`getprop ro.bootmode`
+        if [ "charger" != $bootmode ]; then
+                start vendor.hbtp
+        fi
 }
 
 case "$target" in
@@ -2379,12 +2384,10 @@ case "$target" in
                 "317" | "324" | "325" | "326" | "345" | "346" )
 
             # cpuset settings
-            echo 0-3 > /dev/cpuset/system-background/cpus
-            echo 0-3 > /dev/cpuset/foreground/cpus
-
-            # CPU Governor
-            echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-            echo "schedutil" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+            echo 0-7 > /dev/cpuset/top-app/cpus
+            echo 0-1 > /dev/cpuset/background/cpus
+            echo 0-2 > /dev/cpuset/system-background/cpus
+            echo 0-2,4-7 > /dev/cpuset/foreground/cpus
 
             # bring all cores online
             echo 1 > /sys/devices/system/cpu/cpu0/online
@@ -2409,23 +2412,30 @@ case "$target" in
             echo N > /sys/module/lpm_levels/system/perf/perf-l2-dynret/idle_enabled
             echo N > /sys/module/lpm_levels/system/pwr/pwr-l2-ret/idle_enabled
             echo N > /sys/module/lpm_levels/system/perf/perf-l2-ret/idle_enabled
-
             # enable LPM
             echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 
             # Set Memory parameters
             configure_memory_parameters
 
+            # set lmk minfree for MemTotal greater than 6G
+	    arch_type=`uname -m`
+	    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
+	    MemTotal=${MemTotalStr:16:8}
+	    if [ "$arch_type" == "aarch64" ] && [ $MemTotal -gt 5505024 ]; then
+	        echo "18432,23040,27648,32256,85296,120640" > /sys/module/lowmemorykiller/parameters/minfree
+	    fi
 
             # Start cdsprpcd only for sdm660 and disable for sdm630
             start vendor.cdsprpcd
-
-            # Start Host based Touch processing
-                case "$hw_platform" in
-                        "MTP" | "Surf" | "RCM" | "QRD" )
-                        start_hbtp
-                        ;;
-                esac
+##D2SP&F7A has no hbtp feature
+#            # Start Host based Touch processing
+#                case "$hw_platform" in
+#                        "MTP" | "Surf" | "RCM" | "QRD" )
+#                        start_hbtp
+#                        ;;
+#                esac
+#end
             ;;
         esac
         #Apply settings for sdm630 and Tahaa
@@ -2616,7 +2626,7 @@ case "$target" in
 
             # Start Host based Touch processing
             case "$hw_platform" in
-              "MTP" | "Surf" | "RCM" | "QRD" )
+              "MTP" | "Surf" | "RCM" | "QRD" | "HDK" )
                   start_hbtp
                   ;;
             esac
@@ -2760,6 +2770,10 @@ case "$target" in
       echo 100 > /proc/sys/kernel/sched_group_upmigrate
       echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
 
+      # colocation v3 settings
+      echo 740000 > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+
+
       # configure governor settings for little cluster
       echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
       echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/rate_limit_us
@@ -2824,6 +2838,9 @@ case "$target" in
 	      echo 400 > $memlat/mem_latency/ratio_ceil
           done
 
+            #Gold L3 ratio ceil
+          echo 4000 > /sys/class/devfreq/soc:qcom,cpu6-cpu-l3-lat/mem_latency/ratio_ceil
+
 	  #Enable cdspl3 governor for L3 cdsp nodes
 	  for l3cdsp in $device/*cdsp-cdsp-l3-lat/devfreq/*cdsp-cdsp-l3-lat
 	  do
@@ -2875,6 +2892,9 @@ case "$target" in
             echo 85 > /proc/sys/kernel/sched_group_downmigrate
             echo 100 > /proc/sys/kernel/sched_group_upmigrate
             echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+
+            #colocation v3 settings
+            echo 740000 > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
 
             # configure governor settings for little cluster
             echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
@@ -2932,12 +2952,38 @@ case "$target" in
 	            echo 1600 > $llccbw/bw_hwmon/idle_mbps
 	        done
 
+		for npubw in $device/*npu-npu-ddr-bw/devfreq/*npu-npu-ddr-bw
+		do
+		    echo 1 > /sys/devices/virtual/npu/msm_npu/pwr
+		    echo "bw_hwmon" > $npubw/governor
+		    echo 40 > $npubw/polling_interval
+		    echo "1144 1720 2086 2929 3879 5931 6881" > $npubw/bw_hwmon/mbps_zones
+		    echo 4 > $npubw/bw_hwmon/sample_ms
+		    echo 80 > $npubw/bw_hwmon/io_percent
+		    echo 20 > $npubw/bw_hwmon/hist_memory
+		    echo 10 > $npubw/bw_hwmon/hyst_length
+		    echo 30 > $npubw/bw_hwmon/down_thres
+		    echo 0 > $npubw/bw_hwmon/guard_band_mbps
+		    echo 250 > $npubw/bw_hwmon/up_scale
+		    echo 0 > $npubw/bw_hwmon/idle_mbps
+		    echo 0 > /sys/devices/virtual/npu/msm_npu/pwr
+		done
+
 	        #Enable mem_latency governor for L3, LLCC, and DDR scaling
 	        for memlat in $device/*cpu*-lat/devfreq/*cpu*-lat
 	        do
 	            echo "mem_latency" > $memlat/governor
 	            echo 10 > $memlat/polling_interval
 	            echo 400 > $memlat/mem_latency/ratio_ceil
+                done
+
+                #Gold L3 ratio ceil
+                echo 4000 > /sys/class/devfreq/soc:qcom,cpu6-cpu-l3-lat/mem_latency/ratio_ceil
+
+                #Enable cdspl3 governor for L3 cdsp nodes
+                for l3cdsp in $device/*cdsp-cdsp-l3-lat/devfreq/*cdsp-cdsp-l3-lat
+                do
+                    echo "cdspl3" > $l3cdsp/governor
                 done
 
 	        #Enable compute governor for gold latfloor
@@ -3004,6 +3050,7 @@ case "$target" in
             esac
 
       # Core control parameters on silver
+      echo 0 0 0 0 1 1 > /sys/devices/system/cpu/cpu0/core_ctl/not_preferred
       echo 4 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
       echo 60 > /sys/devices/system/cpu/cpu0/core_ctl/busy_up_thres
       echo 40 > /sys/devices/system/cpu/cpu0/core_ctl/busy_down_thres
@@ -3475,8 +3522,6 @@ case "$target" in
 		echo N > /sys/module/lpm_levels/parameters/sleep_disabled
 	fi
 	echo N > /sys/module/lpm_levels/parameters/sleep_disabled
-        # Starting io prefetcher service
-        start iop
 
         # Set Memory parameters
         configure_memory_parameters
@@ -3761,11 +3806,11 @@ case "$target" in
 		echo 4 > $npubw/bw_hwmon/sample_ms
 		echo 80 > $npubw/bw_hwmon/io_percent
 		echo 20 > $npubw/bw_hwmon/hist_memory
-		echo 10 > $npubw/bw_hwmon/hyst_length
+		echo 6  > $npubw/bw_hwmon/hyst_length
 		echo 30 > $npubw/bw_hwmon/down_thres
 		echo 0 > $npubw/bw_hwmon/guard_band_mbps
 		echo 250 > $npubw/bw_hwmon/up_scale
-		echo 1600 > $npubw/bw_hwmon/idle_mbps
+		echo 0 > $npubw/bw_hwmon/idle_mbps
 		echo 0 > /sys/devices/virtual/npu/msm_npu/pwr
 	    done
 
@@ -3822,6 +3867,11 @@ case "$target" in
                     ;;
             esac
         ;;
+        "HDK" )
+            if [ -d /sys/kernel/hbtpsensor ] ; then
+                start_hbtp
+            fi
+        ;;
     esac
 
     echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
@@ -3851,7 +3901,6 @@ case "$target" in
 	echo 5 > /proc/sys/kernel/sched_spill_nr_run
 	echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
         echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
-	start iop
 
         # disable thermal bcl hotplug to switch governor
         echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -4245,18 +4294,6 @@ if [ -f /sys/devices/soc0/select_image ]; then
     echo $image_variant > /sys/devices/soc0/image_variant
     echo $oem_version > /sys/devices/soc0/image_crm_version
 fi
-
-# Change console log level as per console config property
-console_config=`getprop persist.vendor.console.silent.config`
-case "$console_config" in
-    "1")
-        echo "Enable console config to $console_config"
-        echo 0 > /proc/sys/kernel/printk
-        ;;
-    *)
-        echo "Enable console config to $console_config"
-        ;;
-esac
 
 # Parse misc partition path and set property
 misc_link=$(ls -l /dev/block/bootdevice/by-name/misc)
