@@ -9,3 +9,6 @@ type sysfs_touchpanel, sysfs_type, fs_type;
 # Fingerprint
 type cdfinger_data_file, core_data_file_type, data_file_type, file_type;
 type sysfs_call_status, sysfs_type, fs_type;
+
+# proc
+type proc_swappiness, proc_type, fs_type;
