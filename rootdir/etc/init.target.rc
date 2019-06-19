@@ -264,7 +264,6 @@ on property:init.svc.vendor.per_mgr=running
 
 on property:sys.shutdown.requested=*
     stop vendor.per_proxy
-    stop vendor.ims_rtp_daemon
 
 service vendor.qseecomd /vendor/bin/qseecomd
    class core
