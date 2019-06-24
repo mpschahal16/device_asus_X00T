@@ -41,6 +41,10 @@
 # Gestures
 /sys/kernel/touchpanel/dclicknode                                             u:object_r:sysfs:s0
 
+# Lights
+/sys/class/leds(/.*)?								u:object_r:sysfs_leds:s0
+/(vendor|system/vendor)/bin/hw/android\.hardware\.light@2\.0-service\.fmw-RG	u:object_r:hal_light_default_exec:s0
+
 # Other kernel features
 /sys/kernel/rcu_expedited                                                     u:object_r:sysfs:s0
 /sys/kernel/profiling                                                         u:object_r:sysfs:s0
