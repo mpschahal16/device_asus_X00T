@@ -105,7 +105,7 @@ void vendor_check_variant()
 {
     struct sysinfo sys;
     char const *region_file = "/mnt/vendor/persist/flag/countrycode.txt";
-    char const *build_fingerprint, *product_device, *product_model, *product_name;
+    char const *build_fingerprint, *product_device, *product_name;
     std::string region;
 
     sysinfo(&sys);
