@@ -20,7 +20,12 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_o_mr1.mk)
 
 # Inherit some common Citrus stuff
-$(call inherit-product, vendor/citrus/config/common.mk)
+$(call inherit-product, vendor/citrus/common.mk)
+
+TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_DENSITY := xxhdpi
+TARGET_GAPPS_ARCH := arm64
+IS_PHONE := true
 
 # Inherit from X00T device
 $(call inherit-product, $(LOCAL_PATH)/device.mk)
@@ -42,6 +47,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 # Set BUILD_FINGERPRINT variable to be picked up by both system and vendor build.prop
 BUILD_FINGERPRINT := Android/sdm660_64/sdm660_64:9/PKQ1/16.2017.1905.053-20190513:user/release-keys
 
-HAVOC_BUILD_TYPE := UnOfficial
+CITRUS_BUILD_TYPE := UnOfficial
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.havoc.maintainer=mpschahal16
