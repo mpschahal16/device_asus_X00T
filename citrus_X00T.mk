@@ -49,4 +49,4 @@ BUILD_FINGERPRINT := Android/sdm660_64/sdm660_64:9/PKQ1/16.2017.1905.053-2019051
 
 CITRUS_BUILD_TYPE := UnOfficial
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.havoc.maintainer=mpschahal16
+    ro.citrus.maintainer=mpschahal16
