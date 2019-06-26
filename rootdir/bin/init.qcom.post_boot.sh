@@ -239,17 +239,24 @@ function configure_zram_parameters() {
     fi
 
     if [ -f /sys/block/zram0/disksize ]; then
-        echo 1 > /sys/block/zram0/use_dedup
         if [ $MemTotal -le 524288 ]; then
             echo 402653184 > /sys/block/zram0/disksize
+            mkswap /dev/block/zram0
+            swapon /dev/block/zram0 -p 32758
         elif [ $MemTotal -le 1048576 ]; then
             echo 805306368 > /sys/block/zram0/disksize
+            mkswap /dev/block/zram0
+            swapon /dev/block/zram0 -p 32758
+        elif [ $MemTotal -gt 4194304 ]; then
+            setprop ro.config.zram false
+            swapoff /dev/block/zram0
         else
             # Set Zram disk size=1GB for >=2GB Non-Go targets.
-            echo 1073741824 > /sys/block/zram0/disksize
+			echo lz4 > /sys/block/zram0/comp_algorithm
+            echo 536870912 > /sys/block/zram0/disksize
+            mkswap /dev/block/zram0
+            swapon /dev/block/zram0 -p 32758
         fi
-        mkswap /dev/block/zram0
-        swapon /dev/block/zram0 -p 32758
     fi
 }
 
@@ -259,19 +266,33 @@ function configure_read_ahead_kb_values() {
 
     # Set 128 for <= 3GB &
     # set 512 for >= 4GB targets.
+	echo "cfq" > /sys/block/mmcblk0/queue/scheduler
+	echo "cfq" > /sys/block/mmcblk1/queue/scheduler
     if [ $MemTotal -le 3145728 ]; then
+        
         echo 128 > /sys/block/mmcblk0/bdi/read_ahead_kb
         echo 128 > /sys/block/mmcblk0/queue/read_ahead_kb
         echo 128 > /sys/block/mmcblk0rpmb/bdi/read_ahead_kb
         echo 128 > /sys/block/mmcblk0rpmb/queue/read_ahead_kb
         echo 128 > /sys/block/dm-0/queue/read_ahead_kb
-        echo 128 > /sys/block/dm-1/queue/read_ahead_kb
+		
+        
+		echo 256 > /sys/block/mmcblk1/bdi/read_ahead_kb
+        echo 256 > /sys/block/mmcblk1/queue/read_ahead_kb
+        echo 256 > /sys/block/mmcblk1rpmb/bdi/read_ahead_kb
+        echo 256 > /sys/block/mmcblk1rpmb/queue/read_ahead_kb
+        echo 256 > /sys/block/dm-1/queue/read_ahead_kb
     else
-        echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
-        echo 512 > /sys/block/mmcblk0/queue/read_ahead_kb
-        echo 512 > /sys/block/mmcblk0rpmb/bdi/read_ahead_kb
-        echo 512 > /sys/block/mmcblk0rpmb/queue/read_ahead_kb
-        echo 512 > /sys/block/dm-0/queue/read_ahead_kb
+        echo 256 > /sys/block/mmcblk0/bdi/read_ahead_kb
+        echo 256 > /sys/block/mmcblk0/queue/read_ahead_kb
+        echo 256 > /sys/block/mmcblk0rpmb/bdi/read_ahead_kb
+        echo 256 > /sys/block/mmcblk0rpmb/queue/read_ahead_kb
+        echo 256 > /sys/block/dm-0/queue/read_ahead_kb
+
+		echo 512 > /sys/block/mmcblk1/bdi/read_ahead_kb
+        echo 512 > /sys/block/mmcblk1/queue/read_ahead_kb
+        echo 512 > /sys/block/mmcblk1rpmb/bdi/read_ahead_kb
+        echo 512 > /sys/block/mmcblk1rpmb/queue/read_ahead_kb
         echo 512 > /sys/block/dm-1/queue/read_ahead_kb
     fi
 }
@@ -373,10 +394,14 @@ else
 
             vmpres_file_min=$((minfree_5 + (minfree_5 - rem_minfree_4)))
             echo $vmpres_file_min > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-			if [ $MemTotal -gt 2097152 ]; then
-		    # Huaqin add for ZQL1820-699 by shengzhong at 2018/09/19 start
+			if [ $MemTotal -gt 3145730 ]; then
+		    # Huaqin add for ZQL1820-699 by shengzhong at 2018/09/19 start'
+			echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 		    echo "48432,63040,70648,95256,130296,145640" > /sys/module/lowmemorykiller/parameters/minfree
 		    # Huaqin add for ZQL1820-699 by shengzhong at 2018/09/19 end
+			else
+			echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+		    echo "25600,34560,38400,52224,71680,84480" > /sys/module/lowmemorykiller/parameters/minfree
 			fi
         else
             # Set LMK series, vmpressure_file_min for 32 bit non-go targets.
@@ -385,13 +410,14 @@ else
                 disable_core_ctl
                 echo 1 > /sys/module/lowmemorykiller/parameters/enable_lmk
             fi
+		echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
         echo "15360,19200,23040,26880,34415,43737" > /sys/module/lowmemorykiller/parameters/minfree
         echo 53059 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
         fi
 
         # Enable adaptive LMK for all targets &
         # use Google default LMK series for all 64-bit targets >=2GB.
-        echo 0 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
+        #echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 
         # Enable oom_reaper
         if [ -f /sys/module/lowmemorykiller/parameters/oom_reaper ]; then
@@ -427,7 +453,11 @@ else
     # Set allocstall_threshold to 0 for all targets.
     # Set swappiness to 100 for all targets
     echo 0 > /sys/module/vmpressure/parameters/allocstall_threshold
-    echo 100 > /proc/sys/vm/swappiness
+	if [ $MemTotal -gt 3145730 ]; then
+    echo 10 > /proc/sys/vm/swappiness
+	else
+	echo 35 > /proc/sys/vm/swappiness
+	fi
 
     configure_zram_parameters
 
@@ -2400,20 +2430,11 @@ case "$target" in
             echo 20 > /proc/sys/kernel/sched_small_wakee_task_load
 
             # cpuset settings
-            # echo 0-1 > /dev/cpuset/background/cpus
-            # echo 0-3 > /dev/cpuset/system-background/cpus
-
-            # schedtune settings
-            echo 0 > /dev/stune/schedtune.boost
-            echo 0 > /dev/stune/schedtune.prefer_idle
-            echo 1 > /dev/stune/top-app/schedtune.boost
-            echo 1 > /dev/stune/top-app/schedtune.prefer_idle
-            echo 0 > /dev/stune/foreground/schedtune.boost
-            echo 1 > /dev/stune/foreground/schedtune.prefer_idle
-            echo 0 > /dev/stune/background/schedtune.boost
-            echo 0 > /dev/stune/background/schedtune.prefer_idle
-            echo 1 > /dev/stune/rt/schedtune.boost
-            echo 1 > /dev/stune/rt/schedtune.prefer_idle
+            echo 0-1 > /dev/cpuset/background/cpus
+            echo 0-2 > /dev/cpuset/system-background/cpus
+            echo 0-3 > /dev/cpuset/foreground/cpus
+            echo 0-7 > /dev/cpuset/restricted/cpus
+            echo 0-7 > /dev/cpuset/top-app/cpus
 
             # disable thermal bcl hotplug to switch governor
             echo 0 > /sys/module/msm_thermal/core_control/enabled
@@ -2421,45 +2442,20 @@ case "$target" in
             # online CPU0
             echo 1 > /sys/devices/system/cpu/cpu0/online
             # configure governor settings for little cluster
-            echo "interactive" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-            echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
-            echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
-            echo "19000 1401600:39000" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
-            echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
-            echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
-            echo 1401600 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
-            #huaqin add for improve random i/o by xudongfang at 2018/10/25 start
-            echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
-            #huaqin add for improve random i/o by xudongfang at 2018/10/25 end
-            echo "85 1747200:95" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-            echo 39000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
-            echo 0 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
+            echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
             echo 633600 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-            echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
-            echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/fast_ramp_down
+            echo 1612800 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+            echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+            echo 500 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
             # online CPU4
             echo 1 > /sys/devices/system/cpu/cpu4/online
             # configure governor settings for big cluster
-            echo "interactive" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
-            echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
-            echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
-            echo "19000 1401600:39000" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
-            echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
-            echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
-            echo 1401600 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
-            #huaqin add for improve random i/o by xudongfang at 2018/10/25 start
-            echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
-            #huaqin add for improve random i/o by xudongfang at 2018/10/25 end
-            echo "85 1401600:90 2150400:95" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
-            echo 39000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
-            echo 59000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
-            echo 1113600 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
-            echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
-            echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/fast_ramp_down
-
-            # CPU Governor
-            echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
             echo "schedutil" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+            echo 1113600 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+            echo 2150400 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+            echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/down_rate_limit_us
+            echo 500 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/up_rate_limit_us
+            echo 1 > /sys/module/adreno_idler/parameters/adreno_idler_active
 
             # bring all cores online
             echo 1 > /sys/devices/system/cpu/cpu0/online
@@ -2470,6 +2466,7 @@ case "$target" in
             echo 1 > /sys/devices/system/cpu/cpu5/online
             echo 1 > /sys/devices/system/cpu/cpu6/online
             echo 1 > /sys/devices/system/cpu/cpu7/online
+            
 
             # configure LPM
             echo N > /sys/module/lpm_levels/system/pwr/cpu0/ret/idle_enabled
@@ -2524,7 +2521,7 @@ case "$target" in
             echo "cpufreq" > /sys/class/devfreq/soc:qcom,mincpubw/governor
 
             # Start cdsprpcd only for sdm660 and disable for sdm630
-            #start vendor.cdsprpcd
+            start vendor.cdsprpcd
 
             # Start Host based Touch processing
                 case "$hw_platform" in
@@ -4379,6 +4376,3 @@ esac
 misc_link=$(ls -l /dev/block/bootdevice/by-name/misc)
 real_path=${misc_link##*>}
 setprop persist.vendor.mmi.misc_dev_path $real_path
-
-# Signal perfd that boot has completed
-setprop sys.post_boot.parsed 1
